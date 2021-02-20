@@ -1,0 +1,34 @@
+variables:
+- template: variables/pipeline-variables.yml  
+
+# disable PR trigger
+pr: none
+
+# enable on feature branch
+trigger:
+  batch: true
+  branches:
+    include:
+    - feature/*
+  paths:    
+    exclude:
+    - pipelines
+
+pool:
+  vmImage: 'Ubuntu-latest'
+
+resources:
+- repo: self
+
+stages:
+    
+#######################################################
+#### BUILD APPLICATION
+#######################################################
+- stage: BUILD  
+  displayName: 'Build FE App'
+  jobs:  
+
+  - template: jobs/template-build.yml  
+    parameters:
+      includeSonarQube: false

@@ -1,0 +1,31 @@
+variables:
+- template: variables/pipeline-variables.yml  
+
+# Enable trigger on PR to Develop
+pr:
+  branches:
+    include:
+    - develop 
+
+# disable CI trigger
+trigger: none
+
+pool:
+  vmImage: 'Ubuntu-latest'
+
+resources:
+- repo: self
+
+stages:
+#######################################################
+#### BUILD APPLICATION
+#######################################################
+- stage: BUILD
+  variables:
+    - template: 'variables/pipeline-variables-tst.yml'
+  displayName: 'Build and Test App'
+  jobs:  
+
+  - template: jobs/template-build.yml
+    parameters:         
+      includeSonarQube: true

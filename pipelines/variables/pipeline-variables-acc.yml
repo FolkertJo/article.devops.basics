@@ -1,0 +1,4 @@
+variables:
+  environment: 'ACC'
+  environmentShort: 'acc'
+  appSize: 'S1'

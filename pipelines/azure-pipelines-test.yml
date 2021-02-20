@@ -1,0 +1,49 @@
+variables:
+- template: variables/pipeline-variables.yml  
+  
+trigger:
+  batch: true
+  branches:
+    include:
+    - main  
+  paths:    
+    exclude:
+    - pipelines
+
+pool:
+  vmImage: 'Ubuntu-latest'
+
+resources:
+- repo: self
+
+stages:
+    
+#######################################################
+#### BUILD APPLICATION
+#######################################################
+- stage: Build
+  variables:
+  - template: 'variables/pipeline-variables-tst.yml'
+  displayName: 'Build and push Docker image'
+  jobs:  
+
+  - template: jobs/template-release-build.yml
+    parameters:  
+      dockerContainerRegistry: '${{ variables.dockerContainerRegistry }}'
+      dockerImageName: '${{ variables.dockerImageName }}'
+      dockerImageTag: 'latest'    
+
+#######################################################
+#### RELEASE APPLICATION
+#######################################################
+- stage: Deploy
+  variables:
+  - template: 'variables/pipeline-variables-tst.yml'
+  displayName: 'Update Webapp'
+  jobs:  
+
+- template: jobs/template-release.yml
+  parameters:  
+    dockerContainerRegistry: '${{ variables.dockerContainerRegistry }}'
+    dockerImageName: '${{ variables.dockerImageName }}'
+    dockerImageTag: 'latest'

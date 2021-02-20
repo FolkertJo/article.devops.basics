@@ -1,0 +1,39 @@
+parameters:
+  includeUnitTest: ''
+  includeSonarQube: ''
+
+jobs:   
+
+  - job: 'BuildApplication'
+    displayName: 'Build FE Solution'
+    steps:
+
+      - task: Npm@1
+        displayName: 'Run NPM install'
+        inputs:
+          command: 'install'
+          workingDir: '$(System.DefaultWorkingDirectory)/src'
+
+      - task: Npm@1
+        displayName: 'Run NPM build'
+        inputs:
+          command: 'custom'
+          workingDir: '$(System.DefaultWorkingDirectory)/src'      
+          customCommand: 'run build'
+              
+      - task: PowerShell@2
+        condition: eq('${{ parameters.includeSonarQube }}', 'true')
+        displayName: 'Run SonarScanner'
+        continueOnError: true
+        inputs: 'Write-Host "Run Sonar Scanner"'
+       
+      - task: PowerShell@2
+        displayName: 'Run Great Success'
+        inputs:
+          targetType: 'inline'
+          script: |            
+            $file = "$(System.DefaultWorkingDirectory)/pipelines/scripts/success.txt"   
+            foreach($line in Get-Content $file) {
+                Write-Host "##[section] $line"
+            }
+            

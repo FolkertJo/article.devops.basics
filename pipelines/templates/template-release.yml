@@ -1,0 +1,29 @@
+parameters:
+  azureSubscription: ''
+  azureContainerRegistry: ''
+  dockerImageName: ''
+  dockerImageTag: ''
+  containerRegistry: ''
+  environment: ''  
+
+jobs:  
+
+- deployment: 'SetNewDockerVersion'
+  displayName: 'Update FE Solution'
+  environment: '${{ parameters.environment }}'
+  strategy:
+    runOnce:
+      deploy:
+        steps:
+
+          - checkout: none 
+
+          - task: AzureWebAppContainer@1
+            displayName: 'Update image to tag ${{ parameters.dockerImageTag }}'
+            inputs:
+              azureSubscription: '${{ parameters.azureSubscription }}'
+              appName: '${{ parameters.appname }}'
+              containers: '${{ parameters.azureContainerRegistry }}/${{ parameters.dockerImageName }}:${{ parameters.dockerImageTag }}'
+              appSettings: |
+                -ENVIRONMENT "${{ parameters.environment }}" 
+                -TAG "${{ parameters.dockerImageTag }}" 

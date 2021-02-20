@@ -1,0 +1,6 @@
+variables: # Azure Devops
+    azureSubscription: '[name of the azure subscrption]'
+    azureContainerRegistry: '[name of the acr]'
+    dockerImageName: '[name-0f-your-docker-image]'
+    dockerImageVersion: 'latest'
+    dockerContainerRegistry: '[name of the DevOps ACR Service Connection]'

@@ -1,0 +1,4 @@
+variables:
+  environment: 'TEST'
+  environmentShort: 'tst'
+  appSize: 'B1'

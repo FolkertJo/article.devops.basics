@@ -1,0 +1,25 @@
+parameters:
+  dockerContainerRegistry: '' 
+  dockerImageName: ''
+  dockerImageTag: ''    
+
+jobs:  
+
+  - job: 'BuildAndPushApplication'
+    displayName: 'Build FE Solution'    
+    steps:
+
+      - checkout: self 
+
+      # build single docker image for all brands
+      - task: Docker@2
+        displayName: 'Build and Push Docker image'
+        inputs:
+          containerRegistry: '${{ parameters.dockerContainerRegistry }}'
+          repository: '${{ parameters.dockerImageName }}'
+          command: 'buildAndPush'
+          Dockerfile: 'App/Dockerfile'
+          buildContext: 'App'
+          tags: |
+            $(Build.BuildId)
+            ${{ parameters.dockerImageTag }}

@@ -1,0 +1,11 @@
+{
+  "name": "sample_app",
+  "version": "1.0.0",
+  "description": "Sample application for Medium Article",
+  "main": "index.js",
+  "author": "Folkert Jongbloed",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
